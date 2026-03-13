@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clase 2 — Bootstrap 5 | Web Responsive II</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       VARIABLES Y RESET
+    ============================================================ */
+    :root {
+      --azul:        #1a3a5c;
+      --azul-medio:  #2563a8;
+      --azul-claro:  #dbeafe;
+      --acento:      #f59e0b;
+      --acento-soft: #fef3c7;
+      --verde:       #16a34a;
+      --verde-soft:  #dcfce7;
+      --morado:      #7c3aed;
+      --morado-soft: #ede9fe;
+      --rojo:        #dc2626;
+      --rojo-soft:   #fee2e2;
+      --gris-100:    #f8fafc;
+      --gris-200:    #e2e8f0;
+      --gris-400:    #94a3b8;
+      --gris-700:    #334155;
+      --blanco:      #ffffff;
+      --texto:       #1e293b;
+      --navbar-h:    64px;
+      --radio:       10px;
+      --sombra:      0 4px 24px rgba(0,0,0,0.09);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--texto); background: var(--gris-100); line-height: 1.7; }
+    img  { max-width: 100%; border-radius: var(--radio); display: block; }
+    a    { color: var(--azul-medio); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--navbar-h); background: var(--azul);
+      z-index: 1000; box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; height: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1.5rem; gap: 1rem;
+    }
+    .nav-brand { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--acento); font-weight: 600; white-space: nowrap; }
+    .nav-links  { display: flex; list-style: none; gap: 0.25rem; flex-wrap: wrap; }
+    .nav-links a { color: #cbd5e1; font-size: 0.8rem; font-weight: 500; padding: 0.4rem 0.65rem; border-radius: 6px; transition: background .2s, color .2s; white-space: nowrap; }
+    .nav-links a:hover, .nav-links a.active { background: rgba(255,255,255,.12); color: #fff; text-decoration: none; }
+    .nav-toggle { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+    @media (max-width: 900px) {
+      .nav-toggle { display: block; }
+      .nav-links { display: none; position: absolute; top: var(--navbar-h); left: 0; right: 0; background: var(--azul); flex-direction: column; padding: 1rem 1.5rem 1.5rem; gap: .25rem; box-shadow: 0 6px 20px rgba(0,0,0,.2); }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: .6rem 1rem; font-size: .9rem; }
+    }
+
+    /* ============================================================
+       LAYOUT BASE
+    ============================================================ */
+    .seccion       { padding: 5rem 1.5rem; scroll-margin-top: var(--navbar-h); }
+    .seccion-alt   { background: var(--blanco); }
+    .container     { max-width: 1000px; margin: 0 auto; }
+
+    .seccion-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; border-bottom: 2px solid var(--gris-200); padding-bottom: 1rem; }
+    .seccion-num    { font-family: 'IBM Plex Mono', monospace; font-size: .8rem; font-weight: 600; color: var(--azul-medio); background: var(--azul-claro); padding: .25rem .6rem; border-radius: 4px; letter-spacing: .05em; }
+    .seccion-header h2 { font-family: 'Source Serif 4', serif; font-size: 1.9rem; font-weight: 700; color: var(--azul); }
+
+    /* ============================================================
+       PORTADA
+    ============================================================ */
+    #portada {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a3a5c 0%, #0f2744 100%);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; padding: 7rem 1.5rem 5rem;
+      position: relative; overflow: hidden;
+    }
+    #portada::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(circle at 18% 50%, rgba(37,99,168,.35) 0%, transparent 55%),
+                  radial-gradient(circle at 82% 20%, rgba(124,58,237,.12) 0%, transparent 50%);
+    }
+    .portada-modulo  { font-family: 'IBM Plex Mono', monospace; font-size: .78rem; letter-spacing: .15em; color: var(--acento); text-transform: uppercase; margin-bottom: 1.25rem; position: relative; }
+    .portada-clase   { font-family: 'IBM Plex Mono', monospace; font-size: 1rem; color: #94a3b8; margin-bottom: .5rem; position: relative; }
+    .portada-titulo  { font-family: 'Source Serif 4', serif; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 2rem; position: relative; }
+    .portada-titulo span { color: #93c5fd; }
+    .portada-linea   { width: 60px; height: 3px; background: var(--acento); margin: 0 auto 2rem; border-radius: 2px; position: relative; }
+    .portada-meta    { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; position: relative; margin-bottom: 2.5rem; }
+    .meta-chip       { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 50px; padding: .5rem 1.2rem; color: #cbd5e1; font-size: .82rem; }
+    .meta-chip strong { color: #fff; font-weight: 600; }
+
+    .bs-badge-wrap { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+    .bs-badge { background: rgba(124,58,237,.15); border: 1px solid rgba(124,58,237,.3); border-radius: 8px; padding: .75rem 1.5rem; color: #c4b5fd; font-family: 'IBM Plex Mono', monospace; font-size: .85rem; font-weight: 600; }
+
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)} }
+
+    /* ============================================================
+       AGENDA
+    ============================================================ */
+    .agenda-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .agenda-card { background: var(--gris-100); border: 1px solid var(--gris-200); border-left: 4px solid var(--azul-medio); border-radius: var(--radio); padding: 1.25rem 1.5rem; display: flex; gap: 1rem; align-items: flex-start; transition: box-shadow .2s, transform .2s; }
+    .agenda-card:hover { box-shadow: var(--sombra); transform: translateY(-2px); }
+    .agenda-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .agenda-card h3 { font-size: .95rem; font-weight: 600; color: var(--azul); margin-bottom: .2rem; }
+    .agenda-card p  { font-size: .83rem; color: var(--gris-400); }
+
+    /* ============================================================
+       CAJAS DE DEFINICIÓN
+    ============================================================ */
+    .def-box {
+      background: var(--azul-claro); border-left: 4px solid var(--azul-medio);
+      border-radius: var(--radio); padding: 1.5rem 1.75rem; margin-bottom: 1.5rem;
+    }
+    .def-box h3 { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; color: var(--azul-medio); font-weight: 700; margin-bottom: .5rem; }
+    .def-box p  { font-family: 'Source Serif 4', serif; font-size: 1.05rem; color: var(--azul); line-height: 1.6; }
+
+    .def-box.morado { background: var(--morado-soft); border-color: var(--morado); }
+    .def-box.morado h3 { color: var(--morado); }
+    .def-box.morado p  { color: #4c1d95; }
+
+    .def-box.verde { background: var(--verde-soft); border-color: var(--verde); }
+    .def-box.verde h3 { color: var(--verde); }
+    .def-box.verde p  { color: #14532d; }
+
+    .def-box.acento { background: var(--acento-soft); border-color: var(--acento); }
+    .def-box.acento h3 { color: #b45309; }
+    .def-box.acento p  { color: #78350f; }
+
+    /* ============================================================
+       PILARES BOOTSTRAP
+    ============================================================ */
+    .pilares-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    @media (max-width: 640px) { .pilares-grid { grid-template-columns: 1fr; } }
+
+    .pilar-card { border-radius: var(--radio); padding: 1.75rem 1.5rem; text-align: center; border: 1px solid var(--gris-200); }
+    .pilar-card.grid-p  { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-color: #bfdbfe; }
+    .pilar-card.comp-p  { background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); border-color: #c4b5fd; }
+    .pilar-card.icons-p { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-color: #bbf7d0; }
+
+    .pilar-icon { font-size: 2.5rem; margin-bottom: .75rem; display: block; }
+    .pilar-card h3 { font-family: 'Source Serif 4', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: .5rem; }
+    .pilar-card.grid-p  h3 { color: #1d4ed8; }
+    .pilar-card.comp-p  h3 { color: var(--morado); }
+    .pilar-card.icons-p h3 { color: var(--verde); }
+    .pilar-card p { font-size: .85rem; color: var(--gris-700); line-height: 1.5; }
+
+    /* ============================================================
+       CÓDIGO + RESULTADO
+    ============================================================ */
+    .demo-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.25rem 0; align-items: start; }
+    @media (max-width: 700px) { .demo-wrap { grid-template-columns: 1fr; } }
+
+    .demo-wrap.full { grid-template-columns: 1fr; }
+
+    .code-panel { background: #0f172a; border-radius: 8px; overflow: hidden; }
+    .code-panel-header { background: #1e293b; padding: .5rem 1rem; display: flex; align-items: center; gap: .5rem; }
+    .code-panel-header span { font-family: 'IBM Plex Mono', monospace; font-size: .72rem; color: #64748b; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .dot-r { background: #ef4444; } .dot-y { background: #f59e0b; } .dot-g { background: #22c55e; }
+
+    .code-panel pre { padding: 1.25rem 1.5rem; font-family: 'IBM Plex Mono', monospace; font-size: .78rem; line-height: 1.9; color: #e2e8f0; overflow-x: auto; }
+    .code-panel .t  { color: #f472b6; }   /* tag     */
+    .code-panel .a  { color: #fbbf24; }   /* attr    */
+    .code-panel .v  { color: #4ade80; }   /* value   */
+    .code-panel .c  { color: #475569; font-style: italic; } /* comment */
+    .code-panel .tx { color: #e2e8f0; }   /* text    */
+
+    .result-panel { background: var(--blanco); border: 1px solid var(--gris-200); border-radius: 8px; overflow: hidden; }
+    .result-panel-header { background: var(--gris-100); border-bottom: 1px solid var(--gris-200); padding: .5rem 1rem; }
+    .result-panel-header span { font-family: 'IBM Plex Mono', monospace; font-size: .72rem; color: var(--gris-400); }
+    .result-body { padding: 1.25rem; }
+
+    /* ============================================================
+       GRID VISUAL
+    ============================================================ */
+    .grid-visual { display: flex; flex-direction: column; gap: .5rem; }
+    .grid-row { display: flex; gap: .25rem; }
+    .grid-col { flex: 1; background: var(--azul-medio); color: white; text-align: center; padding: .5rem .25rem; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: .72rem; font-weight: 600; }
+    .grid-col.alt { background: #1d4ed8; }
+    .grid-col.lite { background: #93c5fd; color: var(--azul); }
+
+    /* Demo columnas reales de Bootstrap con clases inline para no cargar BS */
+    .bs-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+    .bs-col { background: var(--azul-claro); border: 1px solid #bfdbfe; border-radius: 4px; padding: .4rem; text-align: center; font-size: .75rem; font-family: 'IBM Plex Mono', monospace; color: var(--azul); }
+
+    /* ============================================================
+       TABLA BREAKPOINTS
+    ============================================================ */
+    .bp-tabla { width: 100%; border-collapse: collapse; font-size: .85rem; margin: 1rem 0; }
+    .bp-tabla th { background: var(--azul); color: white; padding: .7rem 1rem; text-align: left; font-size: .8rem; font-family: 'IBM Plex Mono', monospace; }
+    .bp-tabla td { padding: .65rem 1rem; border-bottom: 1px solid var(--gris-200); color: var(--gris-700); }
+    .bp-tabla tr:nth-child(even) td { background: var(--gris-100); }
+    .bp-tabla .badge-bp { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: .72rem; font-weight: 600; padding: .2rem .55rem; border-radius: 4px; background: var(--azul-claro); color: var(--azul-medio); }
+
+    /* ============================================================
+       CONTENEDORES
+    ============================================================ */
+    .cont-demo { display: flex; flex-direction: column; gap: .75rem; }
+    .cont-bar { background: var(--azul-medio); color: white; border-radius: 6px; padding: .6rem 1rem; font-family: 'IBM Plex Mono', monospace; font-size: .78rem; position: relative; display: flex; align-items: center; justify-content: space-between; }
+    .cont-bar .cont-label { font-weight: 600; }
+    .cont-bar .cont-px { background: rgba(255,255,255,.15); border-radius: 4px; padding: .15rem .5rem; font-size: .7rem; }
+    .cont-fluid { background: #7c3aed; }
+
+    /* ============================================================
+       CDN
+    ============================================================ */
+    .cdn-steps { display: flex; flex-direction: column; gap: 1rem; }
+    .cdn-step { background: var(--blanco); border: 1px solid var(--gris-200); border-radius: var(--radio); padding: 1.1rem 1.5rem; display: flex; gap: 1rem; align-items: flex-start; }
+    .cdn-num { background: var(--azul); color: white; font-family: 'IBM Plex Mono', monospace; font-size: .75rem; font-weight: 700; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: .05rem; }
+    .cdn-step h4 { font-size: .9rem; font-weight: 600; color: var(--azul); margin-bottom: .3rem; }
+    .cdn-step p  { font-size: .83rem; color: var(--gris-700); }
+
+    /* ============================================================
+       ICONOS
+    ============================================================ */
+    .iconos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; }
+    .icono-card { background: var(--blanco); border: 1px solid var(--gris-200); border-radius: 8px; padding: 1rem; text-align: center; }
+    .icono-card i { font-size: 1.8rem; color: var(--azul-medio); display: block; margin-bottom: .4rem; }
+    .icono-card span { font-family: 'IBM Plex Mono', monospace; font-size: .68rem; color: var(--gris-400); }
+
+    /* ============================================================
+       EJERCICIO
+    ============================================================ */
+    .ejercicio-intro { background: var(--azul); color: white; border-radius: var(--radio); padding: 1.75rem 2rem; margin-bottom: 2rem; }
+    .ejercicio-intro h3 { font-family: 'Source Serif 4', serif; font-size: 1.25rem; margin-bottom: .5rem; }
+    .ejercicio-intro p  { font-size: .92rem; color: #93c5fd; }
+
+    .ej-pasos { display: flex; flex-direction: column; gap: 1.25rem; }
+    .ej-paso  { background: var(--blanco); border: 1px solid var(--gris-200); border-radius: var(--radio); padding: 1.25rem 1.5rem; display: flex; gap: 1.25rem; }
+    .ej-num   { font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; font-weight: 700; color: var(--gris-200); flex-shrink: 0; line-height: 1; margin-top: .1rem; }
+    .ej-paso h4 { font-size: .95rem; font-weight: 600; color: var(--azul); margin-bottom: .4rem; }
+    .ej-paso p  { font-size: .85rem; color: var(--gris-700); margin-bottom: .5rem; }
+
+    /* ============================================================
+       TAREA
+    ============================================================ */
+    .tarea-box { background: linear-gradient(135deg, var(--acento-soft) 0%, #fff7e6 100%); border: 2px solid var(--acento); border-radius: var(--radio); padding: 2rem; margin-bottom: 1.5rem; }
+    .tarea-box h3 { font-family: 'Source Serif 4', serif; font-size: 1.3rem; color: #92400e; margin-bottom: .75rem; }
+    .tarea-box p  { font-size: .92rem; color: #78350f; margin-bottom: .75rem; }
+    .tarea-req { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+    .tarea-req li { display: flex; align-items: flex-start; gap: .6rem; font-size: .88rem; color: #78350f; }
+    .tarea-req li::before { content: '☐'; font-size: 1rem; flex-shrink: 0; color: var(--acento); }
+
+    .entrega-info { background: var(--blanco); border: 1px solid var(--gris-200); border-radius: var(--radio); padding: 1.25rem 1.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .entrega-item span { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--gris-400); font-weight: 600; display: block; margin-bottom: .2rem; }
+    .entrega-item p    { font-size: .92rem; color: var(--azul); font-weight: 600; }
+
+    /* ============================================================
+       UTILIDADES
+    ============================================================ */
+    .nota-tip { background: var(--verde-soft); border-left: 4px solid var(--verde); border-radius: 0 8px 8px 0; padding: .9rem 1.25rem; font-size: .88rem; color: #166534; margin: 1rem 0; }
+    .nota-tip strong { font-weight: 700; }
+    .nota-warn { background: var(--acento-soft); border-left: 4px solid var(--acento); border-radius: 0 8px 8px 0; padding: .9rem 1.25rem; font-size: .88rem; color: #78350f; margin: 1rem 0; }
+
+    .lead { font-family: 'Source Serif 4', serif; font-size: 1.1rem; color: var(--azul); margin-bottom: 1rem; line-height: 1.6; }
+    p.body-p { font-size: .95rem; color: var(--gris-700); margin-bottom: 1rem; }
+
+    code { font-family: 'IBM Plex Mono', monospace; background: var(--gris-200); padding: .1rem .45rem; border-radius: 4px; font-size: .82rem; color: var(--azul); }
+
+    .dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 640px) { .dos-col { grid-template-columns: 1fr; } }
+
+    .img-placeholder { background: var(--gris-200); border-radius: var(--radio); height: 200px; display: flex; align-items: center; justify-content: center; color: var(--gris-400); font-size: .82rem; font-family: 'IBM Plex Mono', monospace; border: 2px dashed var(--gris-400); text-align: center; padding: 1rem; }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer { background: var(--azul); color: #94a3b8; text-align: center; padding: 2rem 1.5rem; font-size: .82rem; }
+    .footer strong { color: white; }
+  </style>
+
+  <!-- Bootstrap Icons (para la sección de iconos) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+  <!-- ======================================================
+       NAVBAR
+  ====================================================== -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <span class="nav-brand">&lt;Bootstrap 5 /&gt;</span>
+      <button class="nav-toggle" id="navToggle">&#9776;</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#portada">Inicio</a></li>
+        <li><a href="#agenda">Agenda</a></li>
+        <li><a href="#que-es">¿Qué es?</a></li>
+        <li><a href="#pilares">Pilares</a></li>
+        <li><a href="#incluir">Incluir BS</a></li>
+        <li><a href="#grid">Grid</a></li>
+        <li><a href="#breakpoints">Breakpoints</a></li>
+        <li><a href="#contenedores">Contenedores</a></li>
+        <li><a href="#componentes">Componentes</a></li>
+        <li><a href="#iconos">Iconos</a></li>
+        <li><a href="#ejercicio">Ejercicio</a></li>
+        <li><a href="#tarea">Tarea</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ======================================================
+       PORTADA
+  ====================================================== -->
+  <section id="portada" class="seccion" style="scroll-margin-top:0;padding:0;">
+    <div style="min-height:100vh;background:linear-gradient(135deg,#1a3a5c 0%,#0f2744 100%);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:7rem 1.5rem 5rem;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 18% 50%,rgba(37,99,168,.35) 0%,transparent 55%),radial-gradient(circle at 82% 20%,rgba(124,58,237,.15) 0%,transparent 50%);"></div>
+
+      <p class="portada-modulo">Brigada de Comunicaciones · Módulo II · 2026</p>
+      <p class="portada-clase">Arquitectura y Diseño Web Responsive II — HTML, CSS y JS</p>
+      <h1 class="portada-titulo">
+        Clase 2<br />
+        <span>Bootstrap 5</span>
+      </h1>
+      <div class="portada-linea"></div>
+
+      <div class="portada-meta">
+        <div class="meta-chip"><strong>Instructor:</strong> Alférez de Navío Montes Girón Javier Estuardo</div>
+        <div class="meta-chip"><strong>Fecha:</strong> Viernes 13 de marzo, 2026</div>
+        <div class="meta-chip"><strong>Horario:</strong> 13:00 – 16:00 hrs</div>
+      </div>
+
+      <div class="bs-badge-wrap">
+        <div class="bs-badge">📐 Grid System</div>
+        <div class="bs-badge">🧩 Componentes</div>
+        <div class="bs-badge">🎨 Iconos</div>
+        <div class="bs-badge">📱 Responsive</div>
+      </div>
+
+      <a href="#agenda" style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);color:#475569;font-size:.78rem;display:flex;flex-direction:column;align-items:center;gap:.4rem;animation:bounce 2s infinite;text-decoration:none;">
+        ver agenda <span style="font-size:1.2rem;">↓</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       AGENDA
+  ====================================================== -->
+  <section class="seccion" id="agenda">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">00</span>
+        <h2>Agenda del Día</h2>
+      </div>
+      <div class="agenda-grid">
+        <div class="agenda-card">
+          <span class="agenda-icon">🤔</span>
+          <div><h3>¿Qué es Bootstrap?</h3><p>Framework, responsive y framework CSS</p></div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">🏛️</span>
+          <div><h3>Pilares de Bootstrap</h3><p>Grid, Componentes e Iconos</p></div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">🔗</span>
+          <div><h3>Incluir Bootstrap</h3><p>CDN en nuestro proyecto HTML</p></div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">📐</span>
+          <div><h3>El Sistema Grid</h3><p>Filas, columnas, 12 columnas y breakpoints</p></div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">📦</span>
+          <div><h3>Contenedores</h3><p>.container y .container-fluid</p></div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">🧩</span>
+          <div><h3>Componentes e Iconos</h3><p>HTML reutilizable y Bootstrap Icons</p></div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">⚡</span>
+          <div><h3>Ejercicio en clase</h3><p>Página responsive con grid y componentes</p></div>
+        </div>
+        <div class="agenda-card">
+          <span class="agenda-icon">📋</span>
+          <div><h3>Tarea</h3><p>Sitio de 3 secciones con Bootstrap</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       ¿QUÉ ES BOOTSTRAP?
+  ====================================================== -->
+  <section class="seccion seccion-alt" id="que-es">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">01</span>
+        <h2>¿Qué es Bootstrap 5?</h2>
+      </div>
+
+      <!-- ¿Qué es un framework? -->
+      <div class="def-box morado" style="margin-bottom:1.25rem;">
+        <h3>🧰 ¿Qué es un Framework?</h3>
+        <p>Un framework es un <strong>conjunto de herramientas, reglas y código ya escrito</strong> que nos da una base sólida para construir proyectos más rápido y de forma ordenada. En lugar de empezar desde cero, usamos lo que el framework ya nos provee.</p>
+      </div>
+
+      <div class="nota-tip" style="margin-bottom:1.5rem;">
+        <strong>🏠 Analogía:</strong> Construir sin framework es como fabricar cada ladrillo de tu casa desde cero. Un framework es como comprar los ladrillos ya hechos, estandarizados y listos para usar — vos solo te preocupás por construir.
+      </div>
+
+      <!-- ¿Qué es Responsive? -->
+      <div class="def-box verde" style="margin-bottom:1.25rem;">
+        <h3>📱 ¿Qué es Responsive (Diseño Responsivo)?</h3>
+        <p>Un diseño responsivo es aquel que <strong>se adapta automáticamente al tamaño de la pantalla</strong> del dispositivo que lo muestra — celular, tablet, laptop o monitor — sin perder su usabilidad ni estética.</p>
+      </div>
+
+      <!-- IMAGEN: comparativa mismo sitio en celular vs desktop -->
+      <img src="img/responsive-comparativa.jpg" alt="Comparativa del mismo sitio en móvil, tablet y desktop" style="margin-bottom:1.5rem; border: 3px solid black;">
+
+      <!-- ¿Qué es un Framework CSS? -->
+      <div class="def-box" style="margin-bottom:1.25rem;">
+        <h3>🎨 ¿Qué es un Framework CSS?</h3>
+        <p>Un framework CSS es una colección de <strong>clases CSS predefinidas</strong> que podemos aplicar directamente en el HTML para agregar estilos sin escribir CSS desde cero. Bootstrap es el framework CSS más popular y usado del mundo.</p>
+      </div>
+
+      <!-- Bootstrap específicamente -->
+      <div class="dos-col" style="margin-top:1.5rem;">
+        <div>
+          <p class="lead">Bootstrap 5 es el framework CSS más popular del mundo.</p>
+          <p class="body-p">Creado por Twitter en 2011 y hoy mantenido como proyecto open source. La versión 5 eliminó la dependencia de jQuery y es completamente compatible con navegadores modernos.</p>
+          <p class="body-p">Con Bootstrap podemos construir sitios responsive, modernos y consistentes escribiendo <strong>mucho menos CSS</strong> — simplemente agregamos clases a nuestro HTML.</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;">
+            <span style="background:#f5f3ff;color:#7c3aed;border:1px solid #c4b5fd;border-radius:50px;padding:.3rem .9rem;font-size:.78rem;font-weight:600;">✅ Gratuito</span>
+            <span style="background:#f5f3ff;color:#7c3aed;border:1px solid #c4b5fd;border-radius:50px;padding:.3rem .9rem;font-size:.78rem;font-weight:600;">✅ Open Source</span>
+            <span style="background:#f5f3ff;color:#7c3aed;border:1px solid #c4b5fd;border-radius:50px;padding:.3rem .9rem;font-size:.78rem;font-weight:600;">✅ Responsive</span>
+            <span style="background:#f5f3ff;color:#7c3aed;border:1px solid #c4b5fd;border-radius:50px;padding:.3rem .9rem;font-size:.78rem;font-weight:600;">✅ Sin jQuery en v5</span>
+          </div>
+        </div>
+        <div>
+          <!-- IMAGEN: logo Bootstrap 5 -->
+          <img src="img/bootstrap-logo.jpg" alt="Logo oficial de Bootstrap 5" style="width:100%; border: 3px solid black;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       PILARES DE BOOTSTRAP
+  ====================================================== -->
+  <section class="seccion" id="pilares">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">02</span>
+        <h2>Pilares de Bootstrap</h2>
+      </div>
+      <p class="lead">Bootstrap se organiza en tres grandes pilares que lo hacen tan poderoso y completo:</p>
+      <div class="pilares-grid">
+        <div class="pilar-card grid-p">
+          <span class="pilar-icon">📐</span>
+          <h3>Grid System</h3>
+          <p>Sistema de rejilla de <strong>12 columnas</strong> que permite crear layouts flexibles y responsive. Es la base estructural de cualquier página con Bootstrap.</p>
+        </div>
+        <div class="pilar-card comp-p">
+          <span class="pilar-icon">🧩</span>
+          <h3>Componentes</h3>
+          <p>Bloques de HTML y CSS reutilizables ya diseñados: navbars, cards, botones, formularios, modales, alertas y más de 30 componentes listos para usar.</p>
+        </div>
+        <div class="pilar-card icons-p">
+          <span class="pilar-icon">🎨</span>
+          <h3>Iconos</h3>
+          <p>Librería oficial de más de <strong>2,000 iconos SVG</strong> gratuitos, disponibles vía CDN. Se integran con una simple clase en cualquier elemento HTML.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       CÓMO INCLUIR BOOTSTRAP
+  ====================================================== -->
+  <section class="seccion seccion-alt" id="incluir">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">03</span>
+        <h2>Cómo Incluir Bootstrap en tu Proyecto</h2>
+      </div>
+
+      <p class="body-p">La forma más rápida y sencilla es usando el <strong>CDN (Content Delivery Network)</strong> — una red de servidores que nos entrega los archivos de Bootstrap directamente desde internet, sin necesidad de descargar nada.</p>
+
+      <!-- De dónde se obtienen los enlaces -->
+      <div class="def-box acento" style="margin-bottom:1.5rem;">
+        <h3>🌐 ¿De dónde se obtienen los enlaces CDN?</h3>
+        <p>Los enlaces oficiales siempre se consiguen desde la documentación oficial de Bootstrap en:<br/>
+        <strong>👉 <a href="https://getbootstrap.com/docs/5.3/getting-started/download/" target="_blank" style="color:#92400e;text-decoration:underline;">getbootstrap.com/docs/5.3/getting-started/download/</a></strong><br/><br/>
+        Dentro de esa página, buscá la sección <strong>"CDN via jsDelivr"</strong> — ahí están los dos enlaces (CSS y JS) actualizados con la versión más reciente.</p>
+      </div>
+
+      <!-- IMAGEN: captura de pantalla de la sección CDN en getbootstrap.com -->
+      <img src="img/bs-cdn-pagina.png" alt="Sección CDN via jsDelivr en getbootstrap.com" style="margin: 1.5rem auto; border: 3px solid black; display: block;">
+
+      <div class="cdn-steps">
+        <div class="cdn-step">
+          <span class="cdn-num">1</span>
+          <div>
+            <h4>Crear la estructura HTML base</h4>
+            <p>Abrí VS Code, creá tu archivo <code>index.html</code> y generá la estructura con el atajo <code>!</code> + Tab.</p>
+          </div>
+        </div>
+        <div class="cdn-step">
+          <span class="cdn-num">2</span>
+          <div>
+            <h4>Pegar el CSS de Bootstrap en el &lt;head&gt;</h4>
+            <p>Copiá el siguiente enlace y pegalo <strong>antes</strong> de cerrar la etiqueta <code>&lt;/head&gt;</code>:</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-panel" style="margin:1rem 0;">
+        <div class="code-panel-header">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span style="margin-left:.5rem;">index.html — dentro del &lt;head&gt;</span>
+        </div>
+        <pre><span class="c">&lt;!-- CSS de Bootstrap 5 — va en el &lt;head&gt; --&gt;</span>
+<span class="t">&lt;link</span> <span class="a">href</span>=<span class="v">"https://cdn.jsdelivr.net/npm/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="25474a4a51565157445565100b160b1d">[email&#160;protected]</a>/dist/css/bootstrap.min.css"</span>
+      <span class="a">rel</span>=<span class="v">"stylesheet"</span>
+      <span class="a">integrity</span>=<span class="v">"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"</span>
+      <span class="a">crossorigin</span>=<span class="v">"anonymous"</span><span class="t">&gt;</span></pre>
+      </div>
+
+      <div class="cdn-steps" style="margin-top:.5rem;">
+        <div class="cdn-step">
+          <span class="cdn-num">3</span>
+          <div>
+            <h4>Pegar el JS de Bootstrap también en el &lt;head&gt;</h4>
+            <p>Copiá el siguiente script y pegalo <strong>dentro del <code>&lt;head&gt;</code></strong>, justo debajo del enlace CSS. Ambos enlaces van en el <code>&lt;head&gt;</code>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-panel" style="margin:1rem 0;">
+        <div class="code-panel-header">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span style="margin-left:.5rem;">index.html — dentro del &lt;head&gt;</span>
+        </div>
+        <pre><span class="c">&lt;!-- JS de Bootstrap 5 — también va en el &lt;head&gt; --&gt;</span>
+<span class="t">&lt;script</span> <span class="a">src</span>=<span class="v">"https://cdn.jsdelivr.net/npm/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d7f7272696e696f7c6d5d28332e3325">[email&#160;protected]</a>/dist/js/bootstrap.bundle.min.js"</span>
+        <span class="a">integrity</span>=<span class="v">"sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"</span>
+        <span class="a">crossorigin</span>=<span class="v">"anonymous"</span><span class="t">&gt;&lt;/script&gt;</span></pre>
+      </div>
+
+      <div class="nota-tip">
+        <strong>💡 Estructura completa recomendada:</strong>
+      </div>
+
+      <div class="code-panel" style="margin:.5rem 0 1.5rem;">
+        <div class="code-panel-header">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span style="margin-left:.5rem;">index.html — estructura base con Bootstrap (ambos enlaces en &lt;head&gt;)</span>
+        </div>
+        <pre><span class="t">&lt;!DOCTYPE html&gt;</span>
+<span class="t">&lt;html</span> <span class="a">lang</span>=<span class="v">"es"</span><span class="t">&gt;</span>
+<span class="t">&lt;head&gt;</span>
+  <span class="t">&lt;meta</span> <span class="a">charset</span>=<span class="v">"UTF-8"</span><span class="t">&gt;</span>
+  <span class="t">&lt;meta</span> <span class="a">name</span>=<span class="v">"viewport"</span> <span class="a">content</span>=<span class="v">"width=device-width, initial-scale=1.0"</span><span class="t">&gt;</span>
+  <span class="t">&lt;title&gt;</span><span class="tx">Mi Proyecto con Bootstrap</span><span class="t">&lt;/title&gt;</span>
+  <span class="c">&lt;!-- Bootstrap CSS --&gt;</span>
+  <span class="t">&lt;link</span> <span class="a">href</span>=<span class="v">"https://cdn.jsdelivr.net/npm/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="60020f0f14131412011020554e534e58">[email&#160;protected]</a>/dist/css/bootstrap.min.css"</span>
+        <span class="a">rel</span>=<span class="v">"stylesheet"</span>
+        <span class="a">integrity</span>=<span class="v">"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"</span>
+        <span class="a">crossorigin</span>=<span class="v">"anonymous"</span><span class="t">&gt;</span>
+  <span class="c">&lt;!-- Bootstrap JS --&gt;</span>
+  <span class="t">&lt;script</span> <span class="a">src</span>=<span class="v">"https://cdn.jsdelivr.net/npm/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3d5f5252494e494f5c4d7d08130e1305">[email&#160;protected]</a>/dist/js/bootstrap.bundle.min.js"</span>
+          <span class="a">integrity</span>=<span class="v">"sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"</span>
+          <span class="a">crossorigin</span>=<span class="v">"anonymous"</span><span class="t">&gt;&lt;/script&gt;</span>
+<span class="t">&lt;/head&gt;</span>
+<span class="t">&lt;body&gt;</span>
+
+  <span class="c">&lt;!-- Tu contenido aquí --&gt;</span>
+
+<span class="t">&lt;/body&gt;</span>
+<span class="t">&lt;/html&gt;</span></pre>
+      </div>
+
+      
+    </div>
+  </section>
+
+  <!-- ======================================================
+       EL SISTEMA GRID
+  ====================================================== -->
+  <section class="seccion" id="grid">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">04</span>
+        <h2>El Sistema Grid de Bootstrap</h2>
+      </div>
+
+      <!-- Qué es la grid -->
+      <div class="def-box acento" style="margin-bottom:1.5rem;">
+        <h3>📐 ¿Qué es la Grid?</h3>
+        <p>La Grid (rejilla o cuadriculado) es el sistema que Bootstrap usa para <strong>organizar el contenido en filas y columnas</strong>. Funciona como una tabla invisible que divide la pantalla en 12 columnas de igual tamaño, permitiéndonos controlar cuánto espacio ocupa cada elemento.</p>
+      </div>
+
+      <!-- Las 12 columnas -->
+      <p style="font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gris-400);margin-bottom:.75rem;">Visualización de las 12 columnas</p>
+      <div class="grid-visual" style="margin-bottom:2rem;">
+        <div class="grid-row">
+          <div class="grid-col">1</div><div class="grid-col alt">2</div>
+          <div class="grid-col">3</div><div class="grid-col alt">4</div>
+          <div class="grid-col">5</div><div class="grid-col alt">6</div>
+          <div class="grid-col">7</div><div class="grid-col alt">8</div>
+          <div class="grid-col">9</div><div class="grid-col alt">10</div>
+          <div class="grid-col">11</div><div class="grid-col alt">12</div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-col lite" style="flex:0 0 calc(100%/12*6);">col-6</div>
+          <div class="grid-col lite" style="flex:0 0 calc(100%/12*6);">col-6</div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-col lite" style="flex:0 0 calc(100%/12*4);">col-4</div>
+          <div class="grid-col lite" style="flex:0 0 calc(100%/12*4);">col-4</div>
+          <div class="grid-col lite" style="flex:0 0 calc(100%/12*4);">col-4</div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-col lite" style="flex:0 0 calc(100%/12*3);">col-3</div>
+          <div class="grid-col lite" style="flex:0 0 calc(100%/12*3);">col-3</div>
+          <div class="grid-col lite" style="flex:0 0 calc(100%/12*6);">col-6</div>
+        </div>
+      </div>
+
+      <div class="nota-tip" style="margin-bottom:1.5rem;">
+        <strong>🔑 Regla fundamental:</strong> Los números de columnas en una misma fila <strong>siempre deben sumar 12</strong>. Si suman menos, quedará espacio vacío. Si suman más, las columnas se van a la siguiente línea.
+      </div>
+
+      <!-- Estructura básica -->
+      <p style="font-size:1rem;font-weight:700;color:var(--azul);margin-bottom:1rem;">📋 Estructura básica: contenedor → fila → columnas</p>
+
+      <div class="demo-wrap">
+        <div>
+          <div class="code-panel">
+            <div class="code-panel-header">
+              <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+              <span style="margin-left:.5rem;">HTML</span>
+            </div>
+            <pre><span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"container"</span><span class="t">&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"row"</span><span class="t">&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"col-6"</span><span class="t">&gt;</span>
+      <span class="tx">Columna izquierda</span>
+    <span class="t">&lt;/div&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"col-6"</span><span class="t">&gt;</span>
+      <span class="tx">Columna derecha</span>
+    <span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+<span class="t">&lt;/div&gt;</span></pre>
+          </div>
+        </div>
+        <div class="result-panel">
+          <div class="result-panel-header"><span>Resultado visual</span></div>
+          <div class="result-body">
+            <div class="bs-row">
+              <div class="bs-col" style="flex:0 0 calc(50% - 4px);">col-6<br/>Columna izquierda</div>
+              <div class="bs-col" style="flex:0 0 calc(50% - 4px);">col-6<br/>Columna derecha</div>
+            </div>
+            <p style="font-size:.75rem;color:var(--gris-400);margin-top:.75rem;">6 + 6 = 12 ✅</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clases de columnas -->
+      <p style="font-size:1rem;font-weight:700;color:var(--azul);margin:1.5rem 0 1rem;">🏷️ Clases para la Grid y sus anchos en píxeles</p>
+      <table class="bp-tabla">
+        <thead>
+          <tr>
+            <th>Clase</th>
+            <th>Columnas que ocupa</th>
+            <th>Ancho aproximado (en 1200px)</th>
+            <th>Uso típico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>.col-12</code></td><td>12 de 12</td><td>100% — 1200px</td><td>Bloque completo</td></tr>
+          <tr><td><code>.col-6</code></td><td>6 de 12</td><td>50% — 600px</td><td>Dos columnas iguales</td></tr>
+          <tr><td><code>.col-4</code></td><td>4 de 12</td><td>33.3% — 400px</td><td>Tres columnas iguales</td></tr>
+          <tr><td><code>.col-3</code></td><td>3 de 12</td><td>25% — 300px</td><td>Cuatro columnas iguales</td></tr>
+          <tr><td><code>.col-8</code></td><td>8 de 12</td><td>66.6% — 800px</td><td>Contenido principal</td></tr>
+          <tr><td><code>.col-2</code></td><td>2 de 12</td><td>16.6% — 200px</td><td>Sidebar angosto</td></tr>
+          <tr><td><code>.col</code></td><td>Automático</td><td>Se distribuye equitativamente</td><td>Columnas flexibles</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Ejemplo combinado -->
+      <p style="font-size:1rem;font-weight:700;color:var(--azul);margin:1.5rem 0 1rem;">💡 Ejemplo: layout de 3 columnas (4+4+4)</p>
+      <div class="demo-wrap">
+        <div>
+          <div class="code-panel">
+            <div class="code-panel-header">
+              <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+              <span style="margin-left:.5rem;">HTML</span>
+            </div>
+            <pre><span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"container"</span><span class="t">&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"row"</span><span class="t">&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"col-4"</span><span class="t">&gt;</span><span class="tx">Card 1</span><span class="t">&lt;/div&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"col-4"</span><span class="t">&gt;</span><span class="tx">Card 2</span><span class="t">&lt;/div&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"col-4"</span><span class="t">&gt;</span><span class="tx">Card 3</span><span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+<span class="t">&lt;/div&gt;</span>
+<span class="c">&lt;!-- 4 + 4 + 4 = 12 ✅ --&gt;</span></pre>
+          </div>
+        </div>
+        <div class="result-panel">
+          <div class="result-panel-header"><span>Resultado visual</span></div>
+          <div class="result-body">
+            <div class="bs-row">
+              <div class="bs-col" style="flex:0 0 calc(33.3% - 6px);">col-4<br/>Card 1</div>
+              <div class="bs-col" style="flex:0 0 calc(33.3% - 6px);">col-4<br/>Card 2</div>
+              <div class="bs-col" style="flex:0 0 calc(33.3% - 6px);">col-4<br/>Card 3</div>
+            </div>
+            <p style="font-size:.75rem;color:var(--gris-400);margin-top:.75rem;">4 + 4 + 4 = 12 ✅</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejemplo 8+4 -->
+      <p style="font-size:1rem;font-weight:700;color:var(--azul);margin:1.5rem 0 1rem;">💡 Ejemplo: contenido principal + sidebar (8+4)</p>
+      <div class="demo-wrap">
+        <div>
+          <div class="code-panel">
+            <div class="code-panel-header">
+              <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+              <span style="margin-left:.5rem;">HTML</span>
+            </div>
+            <pre><span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"container"</span><span class="t">&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"row"</span><span class="t">&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"col-8"</span><span class="t">&gt;</span>
+      <span class="tx">Contenido principal</span>
+    <span class="t">&lt;/div&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"col-4"</span><span class="t">&gt;</span>
+      <span class="tx">Sidebar</span>
+    <span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+<span class="t">&lt;/div&gt;</span></pre>
+          </div>
+        </div>
+        <div class="result-panel">
+          <div class="result-panel-header"><span>Resultado visual</span></div>
+          <div class="result-body">
+            <div class="bs-row">
+              <div class="bs-col" style="flex:0 0 calc(66.6% - 4px);">col-8<br/>Contenido principal</div>
+              <div class="bs-col" style="flex:0 0 calc(33.3% - 4px);">col-4<br/>Sidebar</div>
+            </div>
+            <p style="font-size:.75rem;color:var(--gris-400);margin-top:.75rem;">8 + 4 = 12 ✅</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       BREAKPOINTS
+  ====================================================== -->
+  <section class="seccion seccion-alt" id="breakpoints">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">05</span>
+        <h2>Breakpoints</h2>
+      </div>
+
+      <div class="def-box" style="margin-bottom:1.5rem;">
+        <h3>📏 ¿Qué es un Breakpoint?</h3>
+        <p>Un breakpoint es un <strong>punto de quiebre</strong> — un ancho de pantalla específico en el que el diseño cambia para adaptarse mejor al dispositivo. Bootstrap tiene 6 breakpoints predefinidos que cubren desde celulares pequeños hasta monitores grandes.</p>
+      </div>
+
+      <div class="nota-tip" style="margin-bottom:1.5rem;">
+        <strong>🏠 Analogía:</strong> Es como el agua que toma la forma del recipiente — en un vaso pequeño (celular) el contenido se apila verticalmente, en un recipiente grande (monitor) se distribuye en columnas.
+      </div>
+
+      <table class="bp-tabla">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Sufijo en clase</th>
+            <th>Ancho mínimo</th>
+            <th>Dispositivo típico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Extra small</td><td><span class="badge-bp">ninguno (.col-)</span></td><td>&lt; 576px</td><td>Celulares pequeños</td></tr>
+          <tr><td>Small</td><td><span class="badge-bp">.col-sm-</span></td><td>≥ 576px</td><td>Celulares grandes</td></tr>
+          <tr><td>Medium</td><td><span class="badge-bp">.col-md-</span></td><td>≥ 768px</td><td>Tablets</td></tr>
+          <tr><td>Large</td><td><span class="badge-bp">.col-lg-</span></td><td>≥ 992px</td><td>Laptops</td></tr>
+          <tr><td>Extra large</td><td><span class="badge-bp">.col-xl-</span></td><td>≥ 1200px</td><td>Desktops</td></tr>
+          <tr><td>Extra extra large</td><td><span class="badge-bp">.col-xxl-</span></td><td>≥ 1400px</td><td>Monitores grandes</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Ejemplo responsive con breakpoints -->
+      <p style="font-size:1rem;font-weight:700;color:var(--azul);margin:1.5rem 0 1rem;">💡 Columnas que cambian según el tamaño de pantalla</p>
+      <div class="demo-wrap">
+        <div>
+          <div class="code-panel">
+            <div class="code-panel-header">
+              <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+              <span style="margin-left:.5rem;">HTML</span>
+            </div>
+            <pre><span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"container"</span><span class="t">&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"row"</span><span class="t">&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"col-12 col-md-6 col-lg-4"</span><span class="t">&gt;</span>
+      <span class="tx">Card 1</span>
+    <span class="t">&lt;/div&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"col-12 col-md-6 col-lg-4"</span><span class="t">&gt;</span>
+      <span class="tx">Card 2</span>
+    <span class="t">&lt;/div&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"col-12 col-md-6 col-lg-4"</span><span class="t">&gt;</span>
+      <span class="tx">Card 3</span>
+    <span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+<span class="t">&lt;/div&gt;</span></pre>
+          </div>
+        </div>
+        <div class="result-panel">
+          <div class="result-panel-header"><span>Comportamiento según pantalla</span></div>
+          <div class="result-body">
+            <p style="font-size:.78rem;font-weight:700;color:var(--gris-400);margin-bottom:.5rem;">📱 Celular (col-12 → apiladas)</p>
+            <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:.75rem;">
+              <div class="bs-col" style="width:100%;">Card 1</div>
+              <div class="bs-col" style="width:100%;">Card 2</div>
+              <div class="bs-col" style="width:100%;">Card 3</div>
+            </div>
+            <p style="font-size:.78rem;font-weight:700;color:var(--gris-400);margin-bottom:.5rem;">💻 Laptop (col-lg-4 → 3 columnas)</p>
+            <div class="bs-row">
+              <div class="bs-col" style="flex:0 0 calc(33.3% - 6px);">Card 1</div>
+              <div class="bs-col" style="flex:0 0 calc(33.3% - 6px);">Card 2</div>
+              <div class="bs-col" style="flex:0 0 calc(33.3% - 6px);">Card 3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nota-tip">
+        <strong>💡 Leé las clases de izquierda a derecha:</strong> <code>col-12 col-md-6 col-lg-4</code> significa: en celular ocupa 12 (todo el ancho), en tablet ocupa 6 (la mitad), en laptop ocupa 4 (un tercio).
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       CONTENEDORES
+  ====================================================== -->
+  <section class="seccion" id="contenedores">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">06</span>
+        <h2>Contenedores de Bootstrap</h2>
+      </div>
+
+      <p class="body-p">El contenedor es el elemento padre que envuelve las filas y columnas. Bootstrap ofrece dos tipos principales y contenedores responsivos para cada breakpoint.</p>
+
+      <div class="cont-demo" style="margin:1.5rem 0;">
+        <div class="cont-bar" style="width:100%;">
+          <span class="cont-label">.container-fluid</span>
+          <span class="cont-px">100% del ancho siempre</span>
+        </div>
+        <div class="cont-bar" style="width:85%;margin:0 auto;">
+          <span class="cont-label">.container</span>
+          <span class="cont-px">Ancho máximo según breakpoint</span>
+        </div>
+        <div class="cont-bar cont-fluid" style="width:95%;margin:0 auto;">
+          <span class="cont-label">.container-lg</span>
+          <span class="cont-px">100% hasta lg, luego fijo</span>
+        </div>
+      </div>
+
+      <table class="bp-tabla">
+        <thead>
+          <tr>
+            <th>Clase</th>
+            <th>&lt;576px</th>
+            <th>≥576px</th>
+            <th>≥768px</th>
+            <th>≥992px</th>
+            <th>≥1200px</th>
+            <th>≥1400px</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>.container</code></td><td>100%</td><td>540px</td><td>720px</td><td>960px</td><td>1140px</td><td>1320px</td></tr>
+          <tr><td><code>.container-sm</code></td><td>100%</td><td>540px</td><td>720px</td><td>960px</td><td>1140px</td><td>1320px</td></tr>
+          <tr><td><code>.container-md</code></td><td>100%</td><td>100%</td><td>720px</td><td>960px</td><td>1140px</td><td>1320px</td></tr>
+          <tr><td><code>.container-lg</code></td><td>100%</td><td>100%</td><td>100%</td><td>960px</td><td>1140px</td><td>1320px</td></tr>
+          <tr><td><code>.container-xl</code></td><td>100%</td><td>100%</td><td>100%</td><td>100%</td><td>1140px</td><td>1320px</td></tr>
+          <tr><td><code>.container-xxl</code></td><td>100%</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td><td>1320px</td></tr>
+          <tr><td><code>.container-fluid</code></td><td>100%</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td></tr>
+        </tbody>
+      </table>
+
+      <div class="demo-wrap" style="margin-top:1.5rem;">
+        <div>
+          <div class="code-panel">
+            <div class="code-panel-header">
+              <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+              <span style="margin-left:.5rem;">Uso de contenedores</span>
+            </div>
+            <pre><span class="c">&lt;!-- Ancho máximo centrado --&gt;</span>
+<span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"container"</span><span class="t">&gt;</span>
+  <span class="tx">Contenido centrado</span>
+<span class="t">&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- Ancho completo siempre --&gt;</span>
+<span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"container-fluid"</span><span class="t">&gt;</span>
+  <span class="tx">Ancho total</span>
+<span class="t">&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- 100% hasta lg, luego fijo --&gt;</span>
+<span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"container-lg"</span><span class="t">&gt;</span>
+  <span class="tx">Responsive hasta lg</span>
+<span class="t">&lt;/div&gt;</span></pre>
+          </div>
+        </div>
+        <div>
+          <div class="nota-tip">
+            <strong>📌 ¿Cuándo usar cada uno?</strong>
+          </div>
+          <ul style="font-size:.88rem;color:var(--gris-700);list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem;">
+            <li>🔹 <code>.container</code> — Para la mayoría de páginas. Centra y limita el ancho.</li>
+            <li>🔹 <code>.container-fluid</code> — Para secciones hero, headers o cuando querés que ocupe toda la pantalla.</li>
+            <li>🔹 <code>.container-{bp}</code> — Cuando querés control fino sobre en qué tamaño de pantalla empieza a limitarse.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       COMPONENTES
+  ====================================================== -->
+  <section class="seccion seccion-alt" id="componentes">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">07</span>
+        <h2>Componentes de Bootstrap</h2>
+      </div>
+
+      <div class="def-box morado" style="margin-bottom:1.5rem;">
+        <h3>🧩 ¿Qué es un Componente?</h3>
+        <p>Un componente es un <strong>bloque de HTML reutilizable ya diseñado y estilizado</strong> por Bootstrap. Solo copiamos el código del componente, lo pegamos en nuestro HTML y funciona de inmediato — sin escribir CSS ni JS adicional.</p>
+      </div>
+
+      <!-- IMAGEN: screenshot de la documentación de componentes BS -->
+      <img src="img/bs-componentes.png" alt="Sección de componentes en getbootstrap.com" style="margin: 1.5rem auto; border: 3px solid black; display: block;">
+
+      <p class="body-p">Bootstrap incluye más de 30 componentes. Los más usados en el curso serán:</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-top:1rem;">
+        <div style="background:var(--gris-100);border:1px solid var(--gris-200);border-radius:8px;padding:1rem;text-align:center;">
+          <span style="font-size:1.5rem;display:block;margin-bottom:.4rem;">🧭</span>
+          <strong style="font-size:.88rem;color:var(--azul);">Navbar</strong>
+          <p style="font-size:.78rem;color:var(--gris-400);margin-top:.2rem;">Barra de navegación responsive con menú hamburguesa</p>
+        </div>
+        <div style="background:var(--gris-100);border:1px solid var(--gris-200);border-radius:8px;padding:1rem;text-align:center;">
+          <span style="font-size:1.5rem;display:block;margin-bottom:.4rem;">🃏</span>
+          <strong style="font-size:.88rem;color:var(--azul);">Cards</strong>
+          <p style="font-size:.78rem;color:var(--gris-400);margin-top:.2rem;">Tarjetas de contenido con imagen, título y texto</p>
+        </div>
+        <div style="background:var(--gris-100);border:1px solid var(--gris-200);border-radius:8px;padding:1rem;text-align:center;">
+          <span style="font-size:1.5rem;display:block;margin-bottom:.4rem;">🔘</span>
+          <strong style="font-size:.88rem;color:var(--azul);">Buttons</strong>
+          <p style="font-size:.78rem;color:var(--gris-400);margin-top:.2rem;">Botones con múltiples estilos y tamaños</p>
+        </div>
+        <div style="background:var(--gris-100);border:1px solid var(--gris-200);border-radius:8px;padding:1rem;text-align:center;">
+          <span style="font-size:1.5rem;display:block;margin-bottom:.4rem;">📝</span>
+          <strong style="font-size:.88rem;color:var(--azul);">Forms</strong>
+          <p style="font-size:.78rem;color:var(--gris-400);margin-top:.2rem;">Formularios estilizados con validación visual</p>
+        </div>
+        <div style="background:var(--gris-100);border:1px solid var(--gris-200);border-radius:8px;padding:1rem;text-align:center;">
+          <span style="font-size:1.5rem;display:block;margin-bottom:.4rem;">🪟</span>
+          <strong style="font-size:.88rem;color:var(--azul);">Modal</strong>
+          <p style="font-size:.78rem;color:var(--gris-400);margin-top:.2rem;">Ventanas emergentes con contenido dinámico</p>
+        </div>
+        <div style="background:var(--gris-100);border:1px solid var(--gris-200);border-radius:8px;padding:1rem;text-align:center;">
+          <span style="font-size:1.5rem;display:block;margin-bottom:.4rem;">🔔</span>
+          <strong style="font-size:.88rem;color:var(--azul);">Alerts</strong>
+          <p style="font-size:.78rem;color:var(--gris-400);margin-top:.2rem;">Mensajes de éxito, error, advertencia e información</p>
+        </div>
+      </div>
+
+      <p style="font-size:1rem;font-weight:700;color:var(--azul);margin:1.5rem 0 1rem;">💡 Ejemplo: Botones de Bootstrap</p>
+      <div class="demo-wrap">
+        <div>
+          <div class="code-panel">
+            <div class="code-panel-header">
+              <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+              <span style="margin-left:.5rem;">HTML</span>
+            </div>
+            <pre><span class="t">&lt;button</span> <span class="a">class</span>=<span class="v">"btn btn-primary"</span><span class="t">&gt;</span>
+  <span class="tx">Principal</span>
+<span class="t">&lt;/button&gt;</span>
+
+<span class="t">&lt;button</span> <span class="a">class</span>=<span class="v">"btn btn-success"</span><span class="t">&gt;</span>
+  <span class="tx">Éxito</span>
+<span class="t">&lt;/button&gt;</span>
+
+<span class="t">&lt;button</span> <span class="a">class</span>=<span class="v">"btn btn-danger"</span><span class="t">&gt;</span>
+  <span class="tx">Peligro</span>
+<span class="t">&lt;/button&gt;</span>
+
+<span class="t">&lt;button</span> <span class="a">class</span>=<span class="v">"btn btn-outline-primary"</span><span class="t">&gt;</span>
+  <span class="tx">Outline</span>
+<span class="t">&lt;/button&gt;</span></pre>
+          </div>
+        </div>
+        <div class="result-panel">
+          <div class="result-panel-header"><span>Resultado visual</span></div>
+          <div class="result-body" style="display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;">
+            <button style="background:#0d6efd;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-size:.9rem;cursor:pointer;">Principal</button>
+            <button style="background:#198754;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-size:.9rem;cursor:pointer;">Éxito</button>
+            <button style="background:#dc3545;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-size:.9rem;cursor:pointer;">Peligro</button>
+            <button style="background:transparent;color:#0d6efd;border:2px solid #0d6efd;padding:.5rem 1rem;border-radius:6px;font-size:.9rem;cursor:pointer;">Outline</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       ICONOS
+  ====================================================== -->
+  <section class="seccion" id="iconos">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">08</span>
+        <h2>Bootstrap Icons</h2>
+      </div>
+
+      <p class="lead">Bootstrap Icons es la librería oficial de iconos de Bootstrap, con más de 2,000 iconos SVG gratuitos y de código abierto.</p>
+      <p class="body-p">Están disponibles vía CDN — simplemente agregamos el enlace en el <code>&lt;head&gt;</code> y usamos una clase <code>&lt;i&gt;</code> en nuestro HTML.</p>
+
+      <div class="code-panel" style="margin:1rem 0;">
+        <div class="code-panel-header">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span style="margin-left:.5rem;">Paso 1 — Agregar en el &lt;head&gt;</span>
+        </div>
+        <pre><span class="t">&lt;link</span> <span class="a">rel</span>=<span class="v">"stylesheet"</span>
+      <span class="a">href</span>=<span class="v">"https://cdn.jsdelivr.net/npm/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="75171a1a010601071405581c161a1b0635445b44465b44">[email&#160;protected]</a>/font/bootstrap-icons.min.css"</span><span class="t">&gt;</span></pre>
+      </div>
+
+      <div class="code-panel" style="margin:1rem 0 1.5rem;">
+        <div class="code-panel-header">
+          <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+          <span style="margin-left:.5rem;">Paso 2 — Usar el icono en el HTML</span>
+        </div>
+        <pre><span class="c">&lt;!-- Formato: bi bi-[nombre-del-icono] --&gt;</span>
+<span class="t">&lt;i</span> <span class="a">class</span>=<span class="v">"bi bi-house"</span><span class="t">&gt;&lt;/i&gt;</span>          <span class="c">&lt;!-- 🏠 Casa --&gt;</span>
+<span class="t">&lt;i</span> <span class="a">class</span>=<span class="v">"bi bi-envelope"</span><span class="t">&gt;&lt;/i&gt;</span>       <span class="c">&lt;!-- ✉️ Correo --&gt;</span>
+<span class="t">&lt;i</span> <span class="a">class</span>=<span class="v">"bi bi-person-circle"</span><span class="t">&gt;&lt;/i&gt;</span>  <span class="c">&lt;!-- 👤 Usuario --&gt;</span>
+<span class="t">&lt;i</span> <span class="a">class</span>=<span class="v">"bi bi-github"</span><span class="t">&gt;&lt;/i&gt;</span>         <span class="c">&lt;!-- 🐙 GitHub --&gt;</span>
+
+<span class="c">&lt;!-- Con tamaño y color mediante clases utilitarias --&gt;</span>
+<span class="t">&lt;i</span> <span class="a">class</span>=<span class="v">"bi bi-star-fill fs-3 text-warning"</span><span class="t">&gt;&lt;/i&gt;</span>
+<span class="t">&lt;i</span> <span class="a">class</span>=<span class="v">"bi bi-check-circle fs-2 text-success"</span><span class="t">&gt;&lt;/i&gt;</span>
+
+<span class="c">&lt;!-- Dentro de un botón --&gt;</span>
+<span class="t">&lt;button</span> <span class="a">class</span>=<span class="v">"btn btn-primary"</span><span class="t">&gt;</span>
+  <span class="t">&lt;i</span> <span class="a">class</span>=<span class="v">"bi bi-send"</span><span class="t">&gt;&lt;/i&gt;</span> Enviar
+<span class="t">&lt;/button&gt;</span></pre>
+      </div>
+
+      <p style="font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gris-400);margin-bottom:1rem;">Muestra de iconos disponibles</p>
+      <div class="iconos-grid">
+        <div class="icono-card"><i class="bi bi-house-fill"></i><span>bi-house-fill</span></div>
+        <div class="icono-card"><i class="bi bi-envelope-fill"></i><span>bi-envelope-fill</span></div>
+        <div class="icono-card"><i class="bi bi-person-circle"></i><span>bi-person-circle</span></div>
+        <div class="icono-card"><i class="bi bi-github"></i><span>bi-github</span></div>
+        <div class="icono-card"><i class="bi bi-star-fill"></i><span>bi-star-fill</span></div>
+        <div class="icono-card"><i class="bi bi-check-circle-fill"></i><span>bi-check-circle-fill</span></div>
+        <div class="icono-card"><i class="bi bi-x-circle-fill"></i><span>bi-x-circle-fill</span></div>
+        <div class="icono-card"><i class="bi bi-gear-fill"></i><span>bi-gear-fill</span></div>
+        <div class="icono-card"><i class="bi bi-search"></i><span>bi-search</span></div>
+        <div class="icono-card"><i class="bi bi-camera-fill"></i><span>bi-camera-fill</span></div>
+        <div class="icono-card"><i class="bi bi-phone-fill"></i><span>bi-phone-fill</span></div>
+        <div class="icono-card"><i class="bi bi-map-fill"></i><span>bi-map-fill</span></div>
+        <div class="icono-card"><i class="bi bi-bar-chart-fill"></i><span>bi-bar-chart-fill</span></div>
+        <div class="icono-card"><i class="bi bi-code-slash"></i><span>bi-code-slash</span></div>
+        <div class="icono-card"><i class="bi bi-send-fill"></i><span>bi-send-fill</span></div>
+        <div class="icono-card"><i class="bi bi-shield-fill"></i><span>bi-shield-fill</span></div>
+      </div>
+
+      <div class="nota-tip" style="margin-top:1.5rem;">
+        <strong>🔍 Explorar todos los iconos:</strong> Visitá <a href="https://icons.getbootstrap.com/" target="_blank">icons.getbootstrap.com</a> para buscar entre los más de 2,000 iconos disponibles. Solo buscá el nombre, copiá la clase y listo.
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       EJERCICIO
+  ====================================================== -->
+  <section class="seccion seccion-alt" id="ejercicio">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">09</span>
+        <h2>Ejercicio en Clase</h2>
+      </div>
+
+      <div class="ejercicio-intro">
+        <h3>⚡ Un archivo HTML por cada tema de Bootstrap</h3>
+        <p>Vamos a practicar cada tema de forma independiente. Cada uno tendrá su propio archivo HTML dentro del mismo repositorio.</p>
+      </div>
+
+      <div class="ej-pasos">
+        <div class="ej-paso">
+          <span class="ej-num">01</span>
+          <div>
+            <h4>Crear el repositorio del ejercicio</h4>
+            <p>En GitHub crear un repositorio nuevo llamado <code>ejercicio-clase02-bootstrap</code>. Clonarlo a su máquina y abrirlo en VS Code.</p>
+          </div>
+        </div>
+        <div class="ej-paso">
+          <span class="ej-num">02</span>
+          <div>
+            <h4>grid.html — Sistema de columnas</h4>
+            <p>Crear el archivo <code>grid.html</code> con Bootstrap incluido. Demostrar al menos 3 combinaciones de columnas distintas: <code>col-6 + col-6</code>, <code>col-4 + col-4 + col-4</code> y <code>col-8 + col-4</code>. Las columnas de cada fila deben sumar 12.</p>
+          </div>
+        </div>
+        <div class="ej-paso">
+          <span class="ej-num">03</span>
+          <div>
+            <h4>breakpoints.html — Columnas responsive</h4>
+            <p>Crear el archivo <code>breakpoints.html</code>. Hacer una fila de 3 elementos que en celular se apilen (<code>col-12</code>), en tablet queden en 2 columnas (<code>col-md-6</code>) y en desktop en 3 columnas (<code>col-lg-4</code>). Redimensionar el navegador para verificar el comportamiento.</p>
+          </div>
+        </div>
+        <div class="ej-paso">
+          <span class="ej-num">04</span>
+          <div>
+            <h4>contenedores.html — container y container-fluid</h4>
+            <p>Crear el archivo <code>contenedores.html</code>. Mostrar visualmente la diferencia entre <code>.container</code> (ancho máximo centrado) y <code>.container-fluid</code> (ancho completo). Usar colores de fondo distintos para que la diferencia sea clara.</p>
+          </div>
+        </div>
+        <div class="ej-paso">
+          <span class="ej-num">05</span>
+          <div>
+            <h4>componentes.html — Componentes de Bootstrap</h4>
+            <p>Crear el archivo <code>componentes.html</code>. Incluir al menos: una navbar con 3 links, 3 botones de estilos distintos (<code>btn-primary</code>, <code>btn-success</code>, <code>btn-outline-danger</code>) y 3 cards con título y texto.</p>
+          </div>
+        </div>
+        <div class="ej-paso">
+          <span class="ej-num">06</span>
+          <div>
+            <h4>iconos.html — Bootstrap Icons</h4>
+            <p>Crear el archivo <code>iconos.html</code> con el CDN de Bootstrap Icons incluido. Mostrar al menos 8 iconos distintos, algunos dentro de botones y otros como elementos independientes con diferentes tamaños usando <code>fs-1</code>, <code>fs-3</code>, <code>fs-5</code>.</p>
+          </div>
+        </div>
+        <div class="ej-paso">
+          <span class="ej-num">07</span>
+          <div>
+            <h4>Commit y push de todos los archivos</h4>
+            <div class="code-panel" style="margin-top:.75rem;">
+              <div class="code-panel-header"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span style="margin-left:.5rem;">Terminal</span></div>
+              <pre><span style="color:#4ade80;">git</span> <span style="color:#fbbf24;">add</span> <span style="color:#f472b6;">.</span>
+<span style="color:#4ade80;">git</span> <span style="color:#fbbf24;">commit</span> <span style="color:#fbbf24;">-m</span> <span style="color:#f472b6;">"Clase 02: ejercicio grid, breakpoints, contenedores, componentes e iconos"</span>
+<span style="color:#4ade80;">git</span> <span style="color:#fbbf24;">push</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nota-tip" style="margin-top:1.5rem;">
+        <strong>✅ Al terminar deberías tener en tu repositorio:</strong> 5 archivos HTML — <code>grid.html</code>, <code>breakpoints.html</code>, <code>contenedores.html</code>, <code>componentes.html</code> e <code>iconos.html</code> — cada uno con Bootstrap incluido y el tema correspondiente demostrado.
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       TAREA
+  ====================================================== -->
+  <section class="seccion" id="tarea">
+    <div class="container">
+      <div class="seccion-header">
+        <span class="seccion-num">10</span>
+        <h2>Tarea</h2>
+      </div>
+
+      <div class="tarea-box">
+        <h3>📋 Sitio Web con Bootstrap 5 — 3 secciones</h3>
+        <p>Crear un sitio web completo sobre el tema de tu elección, usando Bootstrap 5 como base. El diseño debe funcionar correctamente en celular y en desktop.</p>
+        <ul class="tarea-req">
+          <li>Incluir Bootstrap 5 (CSS y JS) y Bootstrap Icons mediante CDN</li>
+          <li>Navbar responsive con el nombre del sitio y al menos 3 links</li>
+          <li>Contenedor con título, descripción y un botón con icono</li>
+          <li>Sección de tarjetas (mínimo 3 cards) usando el grid de Bootstrap: <code>col-12 col-md-6 col-lg-4</code></li>
+          <li>Cada card debe tener: icono de Bootstrap Icons, título y texto descriptivo</li>
+          <li>Sección de formulario de contacto con campos: nombre, correo y mensaje</li>
+          <li>Footer con texto centrado e iconos de redes sociales</li>
+          <li>Las columnas de cada fila deben sumar 12</li>
+          <li>Subir el proyecto al repositorio de GitHub con commit descriptivo</li>
+        </ul>
+      </div>
+
+      <div class="entrega-info">
+        <div class="entrega-item">
+          <span>📅 Entrega</span>
+          <p>Martes 17 de marzo, 2026</p>
+        </div>
+        <div class="entrega-item">
+          <span>📤 Medio</span>
+          <p>Repositorio GitHub (compartir el link)</p>
+        </div>
+        <div class="entrega-item">
+          <span>⭐ Punteo</span>
+          <p>Zona — 4.5 pts totales del curso</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       FOOTER
+  ====================================================== -->
+  <footer class="footer">
+    <p>
+      <strong>Clase 2 — Bootstrap 5</strong><br />
+      Instructor: Alférez de Navío Montes Girón Javier Estuardo ·
+      Brigada de Comunicaciones · Módulo II 2026
+    </p>
+  </footer>
+
+  <!-- ======================================================
+       JAVASCRIPT
+  ====================================================== -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Navbar toggle
+    const toggle = document.getElementById('navToggle');
+    const links  = document.getElementById('navLinks');
+    toggle.addEventListener('click', () => links.classList.toggle('open'));
+    links.querySel
